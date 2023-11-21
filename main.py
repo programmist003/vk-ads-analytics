@@ -35,11 +35,9 @@ for index, account in ad_accs_data.iterrows():
         "v": "5.131",
         "account_id": account_id}).json()
     data = r.get("response") if "response" in r else None
-    ic(data)
     clients = pd.DataFrame(data, columns=["id", "name"])
-    ic(clients)
     clients.rename(columns={"id": "client_id"}, inplace=True)
-    ic(clients)
+    clients["account_id"] = account_id
     client_ids = pd.concat([client_ids, clients])
     time.sleep(0.5)
 ic(client_ids)
