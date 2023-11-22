@@ -25,19 +25,25 @@ ic(ad_accs_data)
 
 # Getting client ids of VK ad accounts
 client_ids = pd.DataFrame(
-    columns=["client_id", "account_id"])
+    columns=["id", "owner_id", "owner_type", "name"])
 for index, account in ad_accs_data.iterrows():
-    account_id = account.id
     if account.type == "general":
+        clients = pd.DataFrame([{"id": None}],columns=["id", "name"])
+        clients["owner_id"] = account.id
+        clients["id"] = None
+        clients["owner_type"] = account.type
+        clients["name"] = account["name"]
+        client_ids = pd.concat([client_ids, clients])
+        ic(clients)
         continue
     r = requests.post(f"{API_ADDRESS}ads.getClients", params={
         "access_token": token,
         "v": "5.131",
-        "account_id": account_id}).json()
+        "account_id": account.id}).json()
     data = r.get("response") if "response" in r else None
     clients = pd.DataFrame(data, columns=["id", "name"])
-    clients.rename(columns={"id": "client_id"}, inplace=True)
-    clients["account_id"] = account_id
+    clients["owner_id"] = account.id
+    clients["owner_type"] = account.type
     client_ids = pd.concat([client_ids, clients])
     time.sleep(0.5)
 ic(client_ids)
