@@ -29,7 +29,7 @@ client_ids = pd.DataFrame(
 for index, account in ad_accs_data.iterrows():
     if account.type == "general":
         clients = pd.DataFrame([{"id": None}], columns=["id", "name"])
-        clients["owner_id"] = None
+        clients["owner_id"] = account.id
         clients["id"] = account.id
         clients["name"] = account["name"]
         client_ids = pd.concat([client_ids, clients])
