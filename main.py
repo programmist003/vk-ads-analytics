@@ -49,7 +49,7 @@ for index, account in ad_accs_data.iterrows():
 ic(client_ids)
 
 # Getting ads
-ad_ids = pd.DataFrame(columns=["campaign_id", "id", "client_id"])
+ad_ids = pd.DataFrame(columns=["campaign_id", "id", "client_id", "owner_id"])
 for index, client in client_ids.iterrows():
     client_id = {client.id: "client_id", client.owner_id: "account_id"}
     client_id = {v: k for k, v in client_id.items()}
@@ -58,11 +58,14 @@ for index, client in client_ids.iterrows():
         'v': VERSION,
     }
     params.update(client_id)
-    r = requests.get('https://api.vk.com/method/ads.getAds',
+    r = requests.get(f'{API_ADDRESS}ads.getAds',
                      params=params).json()
     data = r.get("response") if "response" in r else None
     ads = pd.DataFrame(data, columns=["campaign_id", "id"])
     ads["client_id"] = client.id
+    ads["owner_id"] = client.owner_id
     ad_ids = pd.concat([ad_ids, ads])
     time.sleep(0.5)
 ic(ad_ids)
+
+    
