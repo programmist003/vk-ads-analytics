@@ -113,3 +113,17 @@ ic(ads_stats)
 # Merging data
 full_data = ads_stats.merge(ad_ids, how="outer", on="id")
 ic(full_data)
+
+# Exporting data to xlsx
+files_with_data = []
+for index, client in client_ids.iterrows():
+    client_id, owner_id, *other = client.values
+    filename = f"{owner_id}.xlsx"
+    files_with_data.append(filename)
+    ic(client_id)
+    ic(owner_id)
+    data_to_export = full_data.loc[(full_data["client_id"] == client_id) & (full_data["owner_id"] == owner_id),
+                                   ["id", "impressions", "clicks", "spent", "day_from", "day_to", "campaign_id"]]
+    ic(data_to_export)
+    data_to_export.to_excel(filename, f"{
+                            client_id}" if client_id != owner_id else "data")
