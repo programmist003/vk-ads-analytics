@@ -127,3 +127,4 @@ for index, client in client_ids.iterrows():
     ic(data_to_export)
     data_to_export.to_excel(filename, f"{
                             client_id}" if client_id != owner_id else "data")
+    ic(files_with_data)
