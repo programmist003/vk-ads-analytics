@@ -109,3 +109,7 @@ for owner in list_of_owners:
         ic(stats)
         ads_stats = pd.concat([ads_stats, stats])
 ic(ads_stats)
+
+# пMerging data
+full_data = ads_stats.merge(ad_ids, how="outer", on="id")
+ic(full_data)
