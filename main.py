@@ -5,6 +5,9 @@ import pandas as pd
 import time
 import sys
 from collections import OrderedDict
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+import os
 
 API_ADDRESS = "https://api.vk.com/method/"
 OAUTH_ENDPOINT = "https://oauth.vk.com/"
@@ -128,3 +131,12 @@ for index, client in client_ids.iterrows():
     data_to_export.to_excel(filename, f"{
                             client_id}" if client_id != owner_id else "data")
     ic(files_with_data)
+
+# Uploading data to Google Drive
+gauth = GoogleAuth()
+gauth.LocalWebserverAuth()
+drive = GoogleDrive(gauth)
+for file_name in files_with_data:
+    file = drive.CreateFile({"title": os.path.splitext(file_name)[0]})
+    file.SetContentFile(file_name)
+    file.Upload({"convert": True})
