@@ -8,8 +8,6 @@ TOKEN_FILE = "token.txt"
 class Core:
     API_ADDRESS = "https://api.vk.com/method/"
     VERSION = "5.131"
-    HOST = "http://localhost"
-    PORT = 8000
     OAUTH_ENDPOINT = "https://oauth.vk.com/authorize"
     SCOPE="ads,offline"
 
