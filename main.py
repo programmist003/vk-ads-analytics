@@ -8,13 +8,13 @@ from collections import OrderedDict
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
+from app import config, Core
+from auth import read_token, vk_auth_with_local_webserver
 
-API_ADDRESS = "https://api.vk.com/method/"
-OAUTH_ENDPOINT = "https://oauth.vk.com/"
-VERSION = "5.131"
+API_ADDRESS = Core.API_ADDRESS
+VERSION = Core.VERSION
 
-config = toml.load("config.toml")
-token = config.get("token")
+token = read_token() and vk_auth_with_local_webserver()
 ic(token)
 
 # Getting data from VK API and putting it to dataframe
