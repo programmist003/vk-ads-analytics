@@ -8,7 +8,7 @@ from collections import OrderedDict
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
-from app import config, Core
+from app import config, Core, TOKEN_FILE
 from auth import read_token, vk_auth_with_local_webserver
 
 API_ADDRESS = Core.API_ADDRESS
@@ -16,6 +16,9 @@ VERSION = Core.VERSION
 
 token = read_token() or vk_auth_with_local_webserver()
 ic(token)
+
+with open(TOKEN_FILE, "w+") as f:
+    f.write(token)
 
 # Getting data from VK API and putting it to dataframe
 r = requests.post(f"{API_ADDRESS}ads.getAccounts",
