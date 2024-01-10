@@ -14,7 +14,7 @@ from auth import read_token, vk_auth_with_local_webserver
 API_ADDRESS = Core.API_ADDRESS
 VERSION = Core.VERSION
 
-token = read_token() and vk_auth_with_local_webserver()
+token = read_token() or vk_auth_with_local_webserver()
 ic(token)
 
 # Getting data from VK API and putting it to dataframe
