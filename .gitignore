@@ -2,3 +2,4 @@ venv/
 config.toml
 client_secrets.json
 token.txt
+__pycache__/
