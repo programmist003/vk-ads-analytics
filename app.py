@@ -11,6 +11,7 @@ class Core:
     HOST = "http://localhost"
     PORT = 8000
     OAUTH_ENDPOINT = "https://oauth.vk.com/authorize"
+    SCOPE="ads,offline"
 
 
 class Config:
