@@ -43,7 +43,7 @@ def vk_auth_with_local_webserver():
 
 def read_token():
     token = ""
-    with open(TOKEN_FILE) as f:
+    with open(TOKEN_FILE, "w+") as f:
         token = f.read()
     return token
 
