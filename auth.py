@@ -43,13 +43,13 @@ def vk_auth_with_local_webserver():
 
 def read_token():
     token = ""
-    with open(TOKEN_FILE, "a+") as f:
+    with open(TOKEN_FILE) as f:
         token = f.read()
     return token
 
 
 def test():
-    ic(vk_auth_with_local_webserver())
+    ic(read_token())
 
 
 if __name__ == "__main__":
