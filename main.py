@@ -121,14 +121,14 @@ full_data = ads_stats.merge(ad_ids, how="outer", on="id")
 ic(full_data)
 
 # Preparing for data export
-prepared_data=dict()
+prepared_data=[]
 for index, client in client_ids.iterrows():
     client_id, owner_id, *other = client.values
     ic(client_id)
     ic(owner_id)
-    owner_data = full_data.loc[(full_data["client_id"] == client_id) & (full_data["owner_id"] == owner_id),
+    client_data = full_data.loc[(full_data["client_id"] == client_id) & (full_data["owner_id"] == owner_id),
                                    ["id", "impressions", "clicks", "spent", "day_from", "day_to", "campaign_id"]]
-    prepared_data[(owner_id, client_id)]=owner_data
+    prepared_data.append((owner_id, client_id, client_data))
     ic(prepared_data)
     
 # Exporting data to xlsx
