@@ -53,7 +53,7 @@ for index, account in ad_accs_data.iterrows():
     client_ids = pd.concat([client_ids, clients])
     time.sleep(0.5)
 ic(client_ids)
-
+ic.disable()
 # Getting ads
 ad_ids = pd.DataFrame(columns=["campaign_id", "id", "client_id", "owner_id"])
 for index, client in client_ids.iterrows():
@@ -128,15 +128,16 @@ for index, client in client_ids.iterrows():
     ic(owner_id)
     client_data = full_data.loc[(full_data["client_id"] == client_id) & (full_data["owner_id"] == owner_id),
                                 ["id", "impressions", "clicks", "spent", "day_from", "day_to", "campaign_id"]]
-    prepared_data.append((str(owner_id), str(client_id) if client_id == owner_id else "data", client_data))
+    prepared_data.append((str(owner_id), str(client_id)
+                         if client_id == owner_id else "data", client_data))
     ic(prepared_data)
 
 files_with_data = []
 # Exporting data to xlsx
-for owner_id, client_id, client_data in prepared_data:
-    filename = f"{owner_id}.xlsx"
+for filename_without_ext, sheet_name, client_data in prepared_data:
+    filename = f"{filename_without_ext}.xlsx"
     client_data.reset_index(drop=True).to_excel(
-        filename, f"{client_id}" if client_id != owner_id else "data")
+        filename, sheet_name)
     files_with_data.append(filename)
 
 # Uploading data to Google Drive
