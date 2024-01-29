@@ -121,30 +121,23 @@ full_data = ads_stats.merge(ad_ids, how="outer", on="id")
 ic(full_data)
 
 # Preparing for data export
-prepared_data=[]
+prepared_data: list[tuple[int, int, pd.DataFrame]] = []
 for index, client in client_ids.iterrows():
     client_id, owner_id, *other = client.values
     ic(client_id)
     ic(owner_id)
     client_data = full_data.loc[(full_data["client_id"] == client_id) & (full_data["owner_id"] == owner_id),
-                                   ["id", "impressions", "clicks", "spent", "day_from", "day_to", "campaign_id"]]
+                                ["id", "impressions", "clicks", "spent", "day_from", "day_to", "campaign_id"]]
     prepared_data.append((owner_id, client_id, client_data))
     ic(prepared_data)
-    
-# Exporting data to xlsx
+
 files_with_data = []
-for index, client in client_ids.iterrows():
-    client_id, owner_id, *other = client.values
+# Exporting data to xlsx
+for owner_id, client_id, client_data in prepared_data:
     filename = f"{owner_id}.xlsx"
+    client_data.reset_index(drop=True).to_excel(
+        filename, f"{client_id}" if client_id != owner_id else "data")
     files_with_data.append(filename)
-    ic(client_id)
-    ic(owner_id)
-    data_to_export = full_data.loc[(full_data["client_id"] == client_id) & (full_data["owner_id"] == owner_id),
-                                   ["id", "impressions", "clicks", "spent", "day_from", "day_to", "campaign_id"]]
-    ic(data_to_export)
-    data_to_export.to_excel(filename, f"{
-                            client_id}" if client_id != owner_id else "data")
-    ic(files_with_data)
 
 # Uploading data to Google Drive
 gauth = GoogleAuth()
