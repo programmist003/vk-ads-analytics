@@ -10,6 +10,8 @@ from pydrive.drive import GoogleDrive
 import os
 from app import config, Core, TOKEN_FILE
 from auth import read_token, vk_auth_with_local_webserver
+from export import upload_gsheet
+import numpy as np
 
 API_ADDRESS = Core.API_ADDRESS
 VERSION = Core.VERSION
@@ -117,7 +119,7 @@ for owner in list_of_owners:
 ic(ads_stats)
 
 # Merging data
-full_data = ads_stats.merge(ad_ids, how="outer", on="id")
+full_data = ads_stats.merge(ad_ids, how="outer", on="id").replace({np.nan: None})
 ic(full_data)
 
 # Preparing for data export
@@ -141,10 +143,7 @@ for filename_without_ext, sheet_name, client_data in prepared_data:
     files_with_data.append(filename)
 
 # Uploading data to Google Drive
-gauth = GoogleAuth()
-gauth.LocalWebserverAuth()
-drive = GoogleDrive(gauth)
-for file_name in files_with_data:
-    file = drive.CreateFile({"title": os.path.splitext(file_name)[0]})
-    file.SetContentFile(file_name)
-    file.Upload({"convert": True})
+for *path_to_sheet, data in prepared_data:
+    upload_gsheet(*path_to_sheet, data)
+    time.sleep(0.5)
+sys.exit()
