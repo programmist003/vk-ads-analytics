@@ -43,9 +43,12 @@ def vk_auth_with_local_webserver():
 
 def read_token():
     token = ""
-    with open(TOKEN_FILE, "w+") as f:
-        token = f.read()
-    return token
+    try:
+        with open(TOKEN_FILE, "r") as f:
+            token = f.read()
+            return token
+    except FileNotFoundError:
+        return ""
 
 
 def test():
