@@ -8,8 +8,6 @@ from typing import Literal
 import pandas as pd
 from icecream import ic
 
-ic.disable()
-
 
 def upload_gsheet(name, sheet_name, dataframe):
     creds_file = "credentials.json"
@@ -27,7 +25,6 @@ def open_or_create_spreadsheet(client: gspread.Client, name: str):
 
 
 def open_or_create_worksheet(spreadsheet: gspread.Spreadsheet, name: str, dataframe: pd.DataFrame):
-    ic(dataframe.shape)
     ws: gspread.Worksheet
     try:
         ws = spreadsheet.worksheet(name)
