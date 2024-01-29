@@ -119,7 +119,8 @@ for owner in list_of_owners:
 ic(ads_stats)
 
 # Merging data
-full_data = ads_stats.merge(ad_ids, how="outer", on="id").replace({np.nan: None})
+full_data = ads_stats.merge(
+    ad_ids, how="outer", on="id").replace({np.nan: None})
 ic(full_data)
 
 # Preparing for data export

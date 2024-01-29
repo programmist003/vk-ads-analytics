@@ -4,15 +4,34 @@ from pydrive.drive import GoogleDrive
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 from app import config
+from typing import Literal
+import pandas as pd
+from icecream import ic
+
+ic.disable()
 
 
 def upload_gsheet(name, sheet_name, dataframe):
     creds_file = "credentials.json"
-    scope = ['https://spreadsheets.google.com/feeds',
-             'https://www.googleapis.com/auth/drive']
-    gc = gc = gspread.service_account(creds_file)
-    sh = gc.create(name)
-    worksheet = sh.add_worksheet(sheet_name, 1000, 1000)
-    worksheet.update([dataframe.columns.values.tolist()] +
-                     dataframe.values.tolist())
+    gc = gspread.service_account(creds_file)
+    sh = open_or_create_spreadsheet(gc, name)
+    open_or_create_worksheet(sh, sheet_name, dataframe)
     sh.share(config.gmail, perm_type='user', role='writer')
+
+
+def open_or_create_spreadsheet(client: gspread.Client, name: str):
+    try:
+        return client.open(name)
+    except gspread.SpreadsheetNotFound:
+        return client.create(name)
+
+
+def open_or_create_worksheet(spreadsheet: gspread.Spreadsheet, name: str, dataframe: pd.DataFrame):
+    ic(dataframe.shape)
+    ws: gspread.Worksheet
+    try:
+        ws = spreadsheet.worksheet(name)
+    except gspread.WorksheetNotFound:
+        ws = spreadsheet.add_worksheet(name, *dataframe.shape)
+    ws.update([dataframe.columns.values.tolist()] +
+              dataframe.values.tolist())
