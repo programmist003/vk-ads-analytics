@@ -129,7 +129,7 @@ for index, client in client_ids.iterrows():
     client_data = full_data.loc[(full_data["client_id"] == client_id) & (full_data["owner_id"] == owner_id),
                                 ["id", "impressions", "clicks", "spent", "day_from", "day_to", "campaign_id"]]
     prepared_data.append((str(owner_id), str(client_id)
-                         if client_id == owner_id else "data", client_data))
+                         if client_id != owner_id else "data", client_data))
     ic(prepared_data)
 
 files_with_data = []
