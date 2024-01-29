@@ -53,7 +53,7 @@ for index, account in ad_accs_data.iterrows():
     client_ids = pd.concat([client_ids, clients])
     time.sleep(0.5)
 ic(client_ids)
-ic.disable()
+
 # Getting ads
 ad_ids = pd.DataFrame(columns=["campaign_id", "id", "client_id", "owner_id"])
 for index, client in client_ids.iterrows():
@@ -132,8 +132,8 @@ for index, client in client_ids.iterrows():
                          if client_id != owner_id else "data", client_data))
     ic(prepared_data)
 
-files_with_data = []
 # Exporting data to xlsx
+files_with_data = []
 for filename_without_ext, sheet_name, client_data in prepared_data:
     filename = f"{filename_without_ext}.xlsx"
     client_data.reset_index(drop=True).to_excel(
