@@ -14,7 +14,7 @@ class Core:
 
 class Config:
     vk_app_id: int
-
+    gmail: str
     def __init__(self, f) -> None:
         conf = toml.load(f)
         if conf is not None:
