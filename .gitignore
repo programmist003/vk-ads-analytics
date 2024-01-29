@@ -3,3 +3,5 @@ config.toml
 client_secrets.json
 token.txt
 __pycache__/
+credentials.json
+*.xlsx
