@@ -121,14 +121,14 @@ full_data = ads_stats.merge(ad_ids, how="outer", on="id")
 ic(full_data)
 
 # Preparing for data export
-prepared_data: list[tuple[int, int, pd.DataFrame]] = []
+prepared_data: list[tuple[str, str, pd.DataFrame]] = []
 for index, client in client_ids.iterrows():
     client_id, owner_id, *other = client.values
     ic(client_id)
     ic(owner_id)
     client_data = full_data.loc[(full_data["client_id"] == client_id) & (full_data["owner_id"] == owner_id),
                                 ["id", "impressions", "clicks", "spent", "day_from", "day_to", "campaign_id"]]
-    prepared_data.append((owner_id, client_id, client_data))
+    prepared_data.append((str(owner_id), str(client_id) if client_id == owner_id else "data", client_data))
     ic(prepared_data)
 
 files_with_data = []
